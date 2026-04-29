@@ -92,10 +92,30 @@ export default function ProviderDetail() {
         </View>
 
         {tab === "portfolio" && (
-          <View style={s.gallery}>
-            {p.portfolio.map((url, i) => (
-              <Image key={i} source={{ uri: url }} style={s.galleryImg} />
-            ))}
+          <View>
+            <View style={s.igHeader}>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                <Ionicons name="logo-instagram" size={18} color={COLORS.primary} />
+                <Text style={s.igHeaderTxt}>Latest from Instagram</Text>
+              </View>
+              {p.instagram && (
+                <TouchableOpacity testID="ig-handle-link" onPress={() => Linking.openURL(`https://instagram.com/${p.instagram?.replace(/^@/, "")}`)}>
+                  <Text style={s.igHandle}>{p.instagram}</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            <View style={s.gallery}>
+              {p.portfolio.map((url, i) => (
+                <TouchableOpacity
+                  key={i}
+                  testID={`portfolio-img-${i}`}
+                  onPress={() => p.instagram && Linking.openURL(`https://instagram.com/${p.instagram.replace(/^@/, "")}`)}
+                  activeOpacity={0.85}
+                >
+                  <Image source={{ uri: url }} style={s.galleryImg} />
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
         )}
 
@@ -181,8 +201,11 @@ const s = StyleSheet.create({
   tabActive: { backgroundColor: COLORS.primary, borderColor: COLORS.primary },
   tabTxt: { fontSize: 13, fontWeight: "700", color: COLORS.textSecondary },
   tabTxtActive: { color: "#fff" },
-  gallery: { flexDirection: "row", flexWrap: "wrap", gap: 6, paddingHorizontal: SPACING.lg, marginTop: 14 },
+  gallery: { flexDirection: "row", flexWrap: "wrap", gap: 6, paddingHorizontal: SPACING.lg, marginTop: 4 },
   galleryImg: { width: "32%", aspectRatio: 1, borderRadius: RADIUS.md, backgroundColor: COLORS.borderLight },
+  igHeader: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: SPACING.lg, marginTop: 16, marginBottom: 12 },
+  igHeaderTxt: { fontSize: 14, fontWeight: "800", color: COLORS.text },
+  igHandle: { fontSize: 13, fontWeight: "700", color: COLORS.primary },
   svCard: { flexDirection: "row", gap: 12, padding: 14, backgroundColor: COLORS.surface, borderRadius: RADIUS.lg, borderWidth: 1, borderColor: COLORS.borderLight, marginTop: 14 },
   svTitle: { fontSize: 15, fontWeight: "700", color: COLORS.text },
   svDesc: { fontSize: 12, color: COLORS.textSecondary, marginTop: 4 },
