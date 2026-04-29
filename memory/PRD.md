@@ -9,7 +9,7 @@ Geo-local discovery mobile app for Indian event creators (bakers, MUAs, decorato
 - **Auth:** JWT Bearer tokens stored in expo-secure-store; bcrypt password hashing
 
 ## Features Implemented
-1. **Auth** — Email/password signup with role select (seeker | provider), login, logout, persisted session.
+1. **Auth** — Email/password signup with role select (seeker | provider). **Signup → routes to login** (no auto-login) and pre-fills the email so user just types password. Login screen has **"Save my login info on this device"** checkbox (default ON) — credentials securely stored via `expo-secure-store` (encrypted on iOS Keychain / Android Keystore) and auto-restored on next launch. Unchecking + signing in clears any saved credentials.
 2. **Discover** (home) — Greeting, city picker, search bar, 6 category grid, "Trending" horizontal carousel, "Top rated" list. City picker is **free-text searchable** AND has a **"Use my current location"** button that requests permission, gets coords via `expo-location`, and reverse-geocodes to a city (native `reverseGeocodeAsync` on iOS/Android, Nominatim/OpenStreetMap fallback for web).
 3. **Search tab** — Filterable list (free-text city input + popular city chips, category chips, sort: top rated / price low / high / recent).
 4. **Provider profile** — Cover, avatar, multi-city chips, bio, rating, services, **"Latest from Instagram" 6-image portfolio gallery** (each tile taps through to the provider's IG handle), reviews. Sticky bottom bar: Call, WhatsApp deep link, Inquiry CTA.

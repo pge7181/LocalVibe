@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { useAuth } from "../../src/auth";
+import { api, formatErr } from "../../src/api";
 import { COLORS, RADIUS, SPACING } from "../../src/theme";
 
 export default function Signup() {
-  const { register } = useAuth();
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -19,10 +18,20 @@ export default function Signup() {
     if (password.length < 6) return Alert.alert("Weak password", "Use at least 6 characters");
     setBusy(true);
     try {
-      await register(email.trim(), password, name.trim(), role);
-      router.replace(role === "provider" ? "/provider-onboarding" : "/(tabs)");
+      // Register but do NOT log the user in. Send them back to login.
+      await api.post("/auth/register", {
+        email: email.trim(),
+        password,
+        name: name.trim(),
+        role,
+      });
+      Alert.alert(
+        "Account created 🎉",
+        "Please sign in to continue.",
+        [{ text: "OK", onPress: () => router.replace({ pathname: "/login", params: { email: email.trim() } }) }]
+      );
     } catch (e: any) {
-      Alert.alert("Signup failed", e.message);
+      Alert.alert("Signup failed", formatErr(e));
     } finally {
       setBusy(false);
     }
@@ -64,7 +73,9 @@ export default function Signup() {
           </TouchableOpacity>
           <View style={s.row}>
             <Text style={s.muted}>Already have an account? </Text>
-            <Link href="/login" asChild><TouchableOpacity testID="goto-login"><Text style={s.link}>Sign in</Text></TouchableOpacity></Link>
+            <TouchableOpacity testID="goto-login" onPress={() => router.replace("/login")}>
+              <Text style={s.link}>Sign in</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
