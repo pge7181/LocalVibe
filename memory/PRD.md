@@ -15,8 +15,9 @@ Geo-local discovery mobile app for Indian event creators (bakers, MUAs, decorato
 4. **Provider profile** — Cover, avatar, multi-city chips, bio, rating, services, **"Latest from Instagram" 6-image portfolio gallery** (each tile taps through to the provider's IG handle), reviews. Sticky bottom bar: Call, WhatsApp deep link, Inquiry CTA.
 5. **Inquiry flow** — Bottom-sheet style form (event type, date, budget, message) → POST /api/inquiries.
 6. **Leads / Inquiries tab** — Provider sees received leads with email-reply action; seeker sees their sent inquiries.
-7. **Provider onboarding** — Multi-step form. Provider can serve **multiple cities** (typed or selected from popular suggestions; chip-based add/remove).
-8. **Profile/settings** — User info, role badge, links to public profile, logout.
+7. **Provider onboarding** — Multi-step form. Provider can serve **multiple cities** (typed or selected from popular suggestions; chip-based add/remove). **Portfolio photo upload via `expo-image-picker`** — provider picks 6–12 photos from their gallery; stored as base64 data-URIs in MongoDB. Onboarding now **requires minimum 6 photos** before going live.
+8. **Manage Portfolio** screen (`/manage-portfolio`) — Existing providers can add/remove photos any time from Profile tab. The first photo automatically becomes the public cover & avatar.
+9. **Profile/settings** — User info, role badge, "Manage portfolio" link for providers, link to public profile, logout.
 
 ## Multi-City Architecture
 - `Provider.cities: List[str]` (array). Filter via Mongo regex case-insensitive match against array elements.

@@ -11,7 +11,9 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Find creators near your current city"
+        "NSLocationWhenInUseUsageDescription": "Find creators near your current city",
+        "NSPhotoLibraryUsageDescription": "Pick portfolio photos to showcase your work",
+        "NSCameraUsageDescription": "Take a portfolio photo to showcase your work"
       }
     },
     "android": {
@@ -20,7 +22,7 @@
         "backgroundColor": "#000"
       },
       "edgeToEdgeEnabled": true,
-      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"]
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "READ_MEDIA_IMAGES"]
     },
     "web": {
       "bundler": "metro",
@@ -33,6 +35,13 @@
         "expo-location",
         {
           "locationAlwaysAndWhenInUsePermission": "Find creators near your current city"
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Pick portfolio photos to showcase your work",
+          "cameraPermission": "Take a portfolio photo to showcase your work"
         }
       ],
       [

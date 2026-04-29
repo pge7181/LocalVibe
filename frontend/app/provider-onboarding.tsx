@@ -21,12 +21,21 @@ export default function Onboarding() {
   const [instagram, setInstagram] = useState("");
   const [priceMin, setPriceMin] = useState("");
   const [priceMax, setPriceMax] = useState("");
+  const [portfolio, setPortfolio] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     api.get("/meta/categories").then((r) => setCats(r.data));
     api.get("/meta/cities").then((r) => setCities(r.data));
   }, []);
+
+  const addPortfolio = async () => {
+    const remaining = 12 - portfolio.length;
+    if (remaining <= 0) return Alert.alert("Limit reached", "Maximum 12 portfolio photos.");
+    const imgs = await pickPortfolioImages(remaining);
+    if (imgs.length) setPortfolio([...portfolio, ...imgs].slice(0, 12));
+  };
+  const removePortfolio = (idx: number) => setPortfolio(portfolio.filter((_, i) => i !== idx));
 
   const addCity = (c: string) => {
     const trimmed = c.trim();
@@ -40,14 +49,15 @@ export default function Onboarding() {
   const submit = async () => {
     if (!name || !phone || !priceMin || !priceMax || !bio) return Alert.alert("Missing fields", "Please fill all required fields");
     if (selectedCities.length === 0) return Alert.alert("Add at least one city", "Tell us where you provide services");
+    if (portfolio.length < 6) return Alert.alert("Add at least 6 photos", `Currently ${portfolio.length} of 6 minimum portfolio photos. Showcase your best work!`);
     setBusy(true);
     try {
       await api.post("/providers", {
         name, category, cities: selectedCities, bio,
-        avatar: "https://images.unsplash.com/photo-1759840278381-bf7d5e332050?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NjV8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjB3b21hbiUyMHBvcnRyYWl0JTIwc21pbGluZ3xlbnwwfHx8fDE3Nzc0NDAwMDl8MA&ixlib=rb-4.1.0&q=85",
-        cover: "https://images.unsplash.com/photo-1671450632893-9b6ec834f492?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxNzV8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjB3ZWRkaW5nJTIwbWFrZXVwJTIwYnJpZGV8ZW58MHx8fHwxNzc3NDQwMDAzfDA&ixlib=rb-4.1.0&q=85",
+        avatar: portfolio[0],
+        cover: portfolio[0],
         phone, whatsapp: phone, instagram,
-        portfolio: [],
+        portfolio,
         services: [],
         price_min: Number(priceMin), price_max: Number(priceMax),
       });
@@ -143,6 +153,26 @@ export default function Onboarding() {
             </View>
           </View>
 
+          <Text style={s.label}>Portfolio photos * <Text style={s.hint}>(min 6, up to 12)</Text></Text>
+          <Text style={s.subhint}>Pick your best & most-liked shots — these become your "Latest from Instagram" gallery.</Text>
+          <View style={s.portfolioGrid}>
+            {portfolio.map((uri, i) => (
+              <TouchableOpacity testID={`ob-portfolio-${i}`} key={i} style={s.portfolioTile} onPress={() => removePortfolio(i)}>
+                <Image source={{ uri }} style={s.portfolioImg} />
+                <View style={s.portfolioRemove}><Ionicons name="close" size={14} color="#fff" /></View>
+              </TouchableOpacity>
+            ))}
+            {portfolio.length < 12 && (
+              <TouchableOpacity testID="ob-portfolio-add" style={[s.portfolioTile, s.portfolioAddTile]} onPress={addPortfolio}>
+                <Ionicons name="add" size={32} color={COLORS.primary} />
+                <Text style={s.portfolioAddTxt}>{portfolio.length === 0 ? "Add photos" : "Add more"}</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          <Text style={[s.subhint, { color: portfolio.length >= 6 ? COLORS.success : COLORS.warning }]}>
+            {portfolio.length >= 6 ? `✓ ${portfolio.length}/12 photos` : `${portfolio.length}/6 minimum`}
+          </Text>
+
           <TouchableOpacity testID="ob-submit" style={[s.btn, busy && { opacity: 0.6 }]} onPress={submit} disabled={busy}>
             <Text style={s.btnTxt}>{busy ? "Creating..." : "Go Live"}</Text>
           </TouchableOpacity>
@@ -171,6 +201,12 @@ const s = StyleSheet.create({
   selectedTxt: { fontSize: 13, fontWeight: "700", color: COLORS.primary },
   cityAddRow: { flexDirection: "row", gap: 8, alignItems: "center" },
   addBtn: { width: 48, height: 48, borderRadius: RADIUS.md, backgroundColor: COLORS.primary, justifyContent: "center", alignItems: "center" },
+  portfolioGrid: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 8 },
+  portfolioTile: { width: "31%", aspectRatio: 1, borderRadius: RADIUS.md, overflow: "hidden", position: "relative" },
+  portfolioImg: { width: "100%", height: "100%" },
+  portfolioRemove: { position: "absolute", top: 4, right: 4, width: 22, height: 22, borderRadius: 11, backgroundColor: "rgba(0,0,0,0.6)", justifyContent: "center", alignItems: "center" },
+  portfolioAddTile: { borderWidth: 2, borderColor: COLORS.primaryMuted, borderStyle: "dashed", justifyContent: "center", alignItems: "center", backgroundColor: COLORS.surface, gap: 4 },
+  portfolioAddTxt: { fontSize: 11, fontWeight: "700", color: COLORS.primary },
   btn: { backgroundColor: COLORS.primary, paddingVertical: 16, borderRadius: RADIUS.md, alignItems: "center", marginTop: 28 },
   btnTxt: { color: "#fff", fontWeight: "700", fontSize: 15 },
 });

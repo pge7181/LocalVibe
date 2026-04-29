@@ -15,6 +15,9 @@ export default function ProfileTab() {
       ? { icon: "rocket-outline", label: "Set up your provider profile", onPress: () => router.push("/provider-onboarding"), highlight: true }
       : null,
     user?.role === "provider" && user.provider_id
+      ? { icon: "images-outline", label: "Manage portfolio", onPress: () => router.push("/manage-portfolio"), highlight: true }
+      : null,
+    user?.role === "provider" && user.provider_id
       ? { icon: "storefront-outline", label: "View public profile", onPress: () => router.push(`/provider/${user.provider_id}`) }
       : null,
     { icon: "shield-checkmark-outline", label: "Privacy & safety", onPress: () => Alert.alert("Privacy", "Reviews are moderated. Contact info is shared only after inquiry.") },
