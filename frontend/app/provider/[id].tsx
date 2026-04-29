@@ -13,7 +13,7 @@ type Provider = {
   id: string; name: string; category: string; cities: string[]; bio: string; cover: string; avatar: string;
   phone: string; whatsapp: string; instagram?: string; portfolio: string[]; services: Service[];
   rating: number; review_count: number; verified: boolean; price_min: number; price_max: number;
-  reviews: Review[];
+  reviews: Review[]; ig_connected?: boolean; ig_username?: string;
 };
 
 export default function ProviderDetail() {
@@ -97,6 +97,12 @@ export default function ProviderDetail() {
               <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
                 <Ionicons name="logo-instagram" size={18} color={COLORS.primary} />
                 <Text style={s.igHeaderTxt}>Latest from Instagram</Text>
+                {p.ig_connected && (
+                  <View style={s.igLiveBadge}>
+                    <View style={s.igLiveDot} />
+                    <Text style={s.igLiveTxt}>LIVE</Text>
+                  </View>
+                )}
               </View>
               {p.instagram && (
                 <TouchableOpacity testID="ig-handle-link" onPress={() => Linking.openURL(`https://instagram.com/${p.instagram?.replace(/^@/, "")}`)}>
@@ -206,6 +212,9 @@ const s = StyleSheet.create({
   igHeader: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: SPACING.lg, marginTop: 16, marginBottom: 12 },
   igHeaderTxt: { fontSize: 14, fontWeight: "800", color: COLORS.text },
   igHandle: { fontSize: 13, fontWeight: "700", color: COLORS.primary },
+  igLiveBadge: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 6, paddingVertical: 2, backgroundColor: COLORS.successMuted, borderRadius: 4 },
+  igLiveDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: COLORS.success },
+  igLiveTxt: { fontSize: 9, fontWeight: "800", color: COLORS.success, letterSpacing: 0.5 },
   svCard: { flexDirection: "row", gap: 12, padding: 14, backgroundColor: COLORS.surface, borderRadius: RADIUS.lg, borderWidth: 1, borderColor: COLORS.borderLight, marginTop: 14 },
   svTitle: { fontSize: 15, fontWeight: "700", color: COLORS.text },
   svDesc: { fontSize: 12, color: COLORS.textSecondary, marginTop: 4 },

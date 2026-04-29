@@ -388,6 +388,9 @@ async def startup():
     await db.providers.create_index([("cities", 1), ("category", 1)])
     await db.reviews.create_index("provider_id")
     await db.inquiries.create_index("provider_id")
+    # TTL on IG OAuth states (10 min)
+    await db.ig_oauth_states.create_index("created_at", expireAfterSeconds=600)
+    await db.ig_oauth_states.create_index("state", unique=True)
 
     # Seed admin
     admin_email = os.environ.get("ADMIN_EMAIL", "admin@localvibe.app")
@@ -428,6 +431,8 @@ async def shutdown():
 
 
 app.include_router(api)
+from ig_oauth import make_router as _ig_router
+app.include_router(_ig_router(db))
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,

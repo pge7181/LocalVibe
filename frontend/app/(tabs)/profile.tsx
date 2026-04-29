@@ -15,6 +15,9 @@ export default function ProfileTab() {
       ? { icon: "rocket-outline", label: "Set up your provider profile", onPress: () => router.push("/provider-onboarding"), highlight: true }
       : null,
     user?.role === "provider" && user.provider_id
+      ? { icon: "logo-instagram", label: "Connect Instagram", onPress: () => router.push("/instagram-connect") }
+      : null,
+    user?.role === "provider" && user.provider_id
       ? { icon: "images-outline", label: "Manage portfolio", onPress: () => router.push("/manage-portfolio"), highlight: true }
       : null,
     user?.role === "provider" && user.provider_id

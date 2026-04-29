@@ -17,7 +17,7 @@ Geo-local discovery mobile app for Indian event creators (bakers, MUAs, decorato
 6. **Leads / Inquiries tab** — Provider sees received leads with email-reply action; seeker sees their sent inquiries.
 7. **Provider onboarding** — Multi-step form. Provider can serve **multiple cities** (typed or selected from popular suggestions; chip-based add/remove). **Portfolio photo upload via `expo-image-picker`** — provider picks 6–12 photos from their gallery; stored as base64 data-URIs in MongoDB. Onboarding now **requires minimum 6 photos** before going live.
 8. **Manage Portfolio** screen (`/manage-portfolio`) — Existing providers can add/remove photos any time from Profile tab. The first photo automatically becomes the public cover & avatar.
-9. **Profile/settings** — User info, role badge, "Manage portfolio" link for providers, link to public profile, logout.
+10. **Instagram Graph API OAuth (Phase 2.2)** — Providers can connect their Instagram **Business or Creator** account via official Instagram Login (post-Dec-2024 Graph API). Server-mediated OAuth flow using `expo-web-browser` + deep link return. Backend exchanges code → short-lived → long-lived token (60-day TTL), encrypts it with Fernet (AES-128 CBC) at rest, fetches latest 6 image posts via `/me/media`, auto-populates portfolio + cover + avatar. Public profile shows a green **LIVE** badge next to "Latest from Instagram" when connected. Provider can `Sync` (re-pull latest) or `Disconnect` from `/instagram-connect` screen.
 
 ## Multi-City Architecture
 - `Provider.cities: List[str]` (array). Filter via Mongo regex case-insensitive match against array elements.
