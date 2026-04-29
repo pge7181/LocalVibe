@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, Image, ActivityIndicator, RefreshControl, Modal, Pressable, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, Image, ActivityIndicator, RefreshControl, Modal, Pressable, KeyboardAvoidingView, Platform, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as Location from "expo-location";
 import { api } from "../../src/api";
 import { useAuth } from "../../src/auth";
 import { COLORS, RADIUS, SPACING, SHADOW } from "../../src/theme";
@@ -157,11 +158,44 @@ export default function Discover() {
 
 function CityPickerModal({ visible, current, suggestions, onClose, onSelect }: { visible: boolean; current: string; suggestions: string[]; onClose: () => void; onSelect: (c: string) => void }) {
   const [input, setInput] = useState("");
+  const [locating, setLocating] = useState(false);
   const filtered = input.trim()
     ? suggestions.filter((c) => c.toLowerCase().includes(input.trim().toLowerCase()))
     : suggestions;
   const trimmed = input.trim();
   const showCustom = trimmed.length > 1 && !suggestions.some((c) => c.toLowerCase() === trimmed.toLowerCase());
+
+  const detectLocation = async () => {
+    setLocating(true);
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert("Permission denied", "Allow location access to auto-detect your city.");
+        return;
+      }
+      const pos = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
+      let cityName: string | null = null;
+      if (Platform.OS !== "web") {
+        const places = await Location.reverseGeocodeAsync({ latitude: pos.coords.latitude, longitude: pos.coords.longitude });
+        const p = places[0];
+        cityName = p?.city || p?.subregion || p?.region || null;
+      }
+      if (!cityName) {
+        // Web or fallback: use Nominatim (OpenStreetMap) free reverse-geocoder
+        const r = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&zoom=10&addressdetails=1`,
+          { headers: { "Accept-Language": "en" } }
+        );
+        const j = await r.json();
+        cityName = j?.address?.city || j?.address?.town || j?.address?.village || j?.address?.county || j?.address?.state || null;
+      }
+      if (cityName) onSelect(cityName);
+      else Alert.alert("Couldn't detect city", "Please type your city instead.");
+    } catch (e: any) {
+      Alert.alert("Location error", e?.message || "Try typing your city instead.");
+    } finally { setLocating(false); }
+  };
+
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <Pressable style={ms.bg} onPress={onClose}>
@@ -186,6 +220,10 @@ function CityPickerModal({ visible, current, suggestions, onClose, onSelect }: {
                 <TouchableOpacity onPress={() => setInput("")}><Ionicons name="close-circle" size={16} color={COLORS.textTertiary} /></TouchableOpacity>
               )}
             </View>
+            <TouchableOpacity testID="city-near-me" style={ms.nearMe} onPress={detectLocation} disabled={locating}>
+              {locating ? <ActivityIndicator size="small" color={COLORS.primary} /> : <Ionicons name="navigate" size={16} color={COLORS.primary} />}
+              <Text style={ms.nearMeTxt}>{locating ? "Detecting your location..." : "Use my current location"}</Text>
+            </TouchableOpacity>
             <ScrollView style={{ maxHeight: 320 }} keyboardShouldPersistTaps="handled">
               <TouchableOpacity testID="city-All" style={ms.row} onPress={() => onSelect("All")}>
                 <Ionicons name="globe-outline" size={18} color={COLORS.textSecondary} />
@@ -221,6 +259,8 @@ const ms = StyleSheet.create({
   title: { fontSize: 18, fontWeight: "800", color: COLORS.text, marginBottom: 12 },
   inputWrap: { flexDirection: "row", alignItems: "center", gap: 10, paddingHorizontal: 14, backgroundColor: COLORS.bg, borderRadius: RADIUS.md, borderWidth: 1, borderColor: COLORS.border, marginBottom: 10 },
   input: { flex: 1, paddingVertical: 12, fontSize: 15, color: COLORS.text },
+  nearMe: { flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 14, paddingVertical: 12, marginBottom: 10, backgroundColor: COLORS.primaryMuted, borderRadius: RADIUS.md, borderWidth: 1, borderColor: COLORS.primaryMuted },
+  nearMeTxt: { fontSize: 14, fontWeight: "700", color: COLORS.primary },
   row: { flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: COLORS.borderLight },
   rowTxt: { flex: 1, fontSize: 15, color: COLORS.text },
   section: { fontSize: 11, fontWeight: "800", color: COLORS.textTertiary, textTransform: "uppercase", letterSpacing: 0.6, marginTop: 14, marginBottom: 4 },

@@ -10,7 +10,7 @@ Geo-local discovery mobile app for Indian event creators (bakers, MUAs, decorato
 
 ## Features Implemented
 1. **Auth** — Email/password signup with role select (seeker | provider), login, logout, persisted session.
-2. **Discover** (home) — Greeting, city picker, search bar, 6 category grid, "Trending" horizontal carousel, "Top rated" list. City picker is **free-text searchable**; works for ANY city worldwide (suggestions only).
+2. **Discover** (home) — Greeting, city picker, search bar, 6 category grid, "Trending" horizontal carousel, "Top rated" list. City picker is **free-text searchable** AND has a **"Use my current location"** button that requests permission, gets coords via `expo-location`, and reverse-geocodes to a city (native `reverseGeocodeAsync` on iOS/Android, Nominatim/OpenStreetMap fallback for web).
 3. **Search tab** — Filterable list (free-text city input + popular city chips, category chips, sort: top rated / price low / high / recent).
 4. **Provider profile** — Cover, avatar, multi-city chips, bio, rating, services, portfolio gallery, reviews. Sticky bottom bar: Call, WhatsApp deep link, Inquiry CTA.
 5. **Inquiry flow** — Bottom-sheet style form (event type, date, budget, message) → POST /api/inquiries.
