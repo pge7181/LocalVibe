@@ -14,7 +14,8 @@ export default function Onboarding() {
   const [cities, setCities] = useState<string[]>([]);
   const [name, setName] = useState(user?.name || "");
   const [category, setCategory] = useState("Bakers");
-  const [city, setCity] = useState("Delhi");
+  const [selectedCities, setSelectedCities] = useState<string[]>([]);
+  const [cityInput, setCityInput] = useState("");
   const [bio, setBio] = useState("");
   const [phone, setPhone] = useState("");
   const [instagram, setInstagram] = useState("");
@@ -27,12 +28,22 @@ export default function Onboarding() {
     api.get("/meta/cities").then((r) => setCities(r.data));
   }, []);
 
+  const addCity = (c: string) => {
+    const trimmed = c.trim();
+    if (!trimmed) return;
+    if (selectedCities.some((x) => x.toLowerCase() === trimmed.toLowerCase())) return;
+    setSelectedCities([...selectedCities, trimmed]);
+    setCityInput("");
+  };
+  const removeCity = (c: string) => setSelectedCities(selectedCities.filter((x) => x !== c));
+
   const submit = async () => {
     if (!name || !phone || !priceMin || !priceMax || !bio) return Alert.alert("Missing fields", "Please fill all required fields");
+    if (selectedCities.length === 0) return Alert.alert("Add at least one city", "Tell us where you provide services");
     setBusy(true);
     try {
       await api.post("/providers", {
-        name, category, city, bio,
+        name, category, cities: selectedCities, bio,
         avatar: "https://images.unsplash.com/photo-1759840278381-bf7d5e332050?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NjV8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjB3b21hbiUyMHBvcnRyYWl0JTIwc21pbGluZ3xlbnwwfHx8fDE3Nzc0NDAwMDl8MA&ixlib=rb-4.1.0&q=85",
         cover: "https://images.unsplash.com/photo-1671450632893-9b6ec834f492?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxNzV8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjB3ZWRkaW5nJTIwbWFrZXVwJTIwYnJpZGV8ZW58MHx8fHwxNzc3NDQwMDAzfDA&ixlib=rb-4.1.0&q=85",
         phone, whatsapp: phone, instagram,
@@ -70,13 +81,45 @@ export default function Onboarding() {
             ))}
           </View>
 
-          <Text style={s.label}>City *</Text>
+          <Text style={s.label}>Cities you serve * <Text style={s.hint}>(add multiple)</Text></Text>
+          {selectedCities.length > 0 && (
+            <View style={s.selectedRow}>
+              {selectedCities.map((c) => (
+                <TouchableOpacity testID={`ob-selected-${c}`} key={c} style={s.selectedChip} onPress={() => removeCity(c)}>
+                  <Ionicons name="location" size={12} color={COLORS.primary} />
+                  <Text style={s.selectedTxt}>{c}</Text>
+                  <Ionicons name="close" size={14} color={COLORS.primary} />
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
+          <View style={s.cityAddRow}>
+            <TextInput
+              testID="ob-city-input"
+              style={[s.input, { flex: 1 }]}
+              value={cityInput}
+              onChangeText={setCityInput}
+              placeholder="Type city name (e.g. Goa, London, Tokyo)"
+              placeholderTextColor={COLORS.textTertiary}
+              onSubmitEditing={() => addCity(cityInput)}
+              returnKeyType="done"
+              autoCapitalize="words"
+            />
+            <TouchableOpacity testID="ob-city-add" style={s.addBtn} onPress={() => addCity(cityInput)}>
+              <Ionicons name="add" size={22} color="#fff" />
+            </TouchableOpacity>
+          </View>
+          <Text style={s.subhint}>Or pick from popular:</Text>
           <View style={s.chipsRow}>
-            {cities.map((c) => (
-              <TouchableOpacity testID={`ob-city-${c}`} key={c} style={[s.chip, city === c && s.chipActive]} onPress={() => setCity(c)}>
-                <Text style={[s.chipTxt, city === c && s.chipTxtActive]}>{c}</Text>
-              </TouchableOpacity>
-            ))}
+            {cities.map((c) => {
+              const active = selectedCities.some((x) => x.toLowerCase() === c.toLowerCase());
+              return (
+                <TouchableOpacity testID={`ob-city-${c}`} key={c} style={[s.chip, active && s.chipActive]}
+                  onPress={() => active ? removeCity(c) : addCity(c)}>
+                  <Text style={[s.chipTxt, active && s.chipTxtActive]}>{active ? "✓ " : "+ "}{c}</Text>
+                </TouchableOpacity>
+              );
+            })}
           </View>
 
           <Text style={s.label}>About you *</Text>
@@ -121,6 +164,13 @@ const s = StyleSheet.create({
   chipActive: { borderColor: COLORS.primary, backgroundColor: COLORS.primaryMuted },
   chipTxt: { fontSize: 13, fontWeight: "600", color: COLORS.textSecondary },
   chipTxtActive: { color: COLORS.primary },
+  hint: { fontSize: 11, color: COLORS.textTertiary, fontWeight: "500" },
+  subhint: { fontSize: 12, color: COLORS.textTertiary, marginTop: 12, marginBottom: 8 },
+  selectedRow: { flexDirection: "row", flexWrap: "wrap", gap: 6, marginBottom: 8 },
+  selectedChip: { flexDirection: "row", alignItems: "center", gap: 5, paddingHorizontal: 10, paddingVertical: 6, backgroundColor: COLORS.primaryMuted, borderRadius: RADIUS.pill, borderWidth: 1, borderColor: COLORS.primary },
+  selectedTxt: { fontSize: 13, fontWeight: "700", color: COLORS.primary },
+  cityAddRow: { flexDirection: "row", gap: 8, alignItems: "center" },
+  addBtn: { width: 48, height: 48, borderRadius: RADIUS.md, backgroundColor: COLORS.primary, justifyContent: "center", alignItems: "center" },
   btn: { backgroundColor: COLORS.primary, paddingVertical: 16, borderRadius: RADIUS.md, alignItems: "center", marginTop: 28 },
   btnTxt: { color: "#fff", fontWeight: "700", fontSize: 15 },
 });

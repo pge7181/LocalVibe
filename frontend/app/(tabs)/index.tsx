@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, Image, ActivityIndicator, RefreshControl, Modal, Pressable } from "react-native";
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, Image, ActivityIndicator, RefreshControl, Modal, Pressable, KeyboardAvoidingView, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -8,7 +8,7 @@ import { useAuth } from "../../src/auth";
 import { COLORS, RADIUS, SPACING, SHADOW } from "../../src/theme";
 
 type Provider = {
-  id: string; name: string; category: string; city: string; cover: string; avatar: string;
+  id: string; name: string; category: string; cities: string[]; cover: string; avatar: string;
   rating: number; review_count: number; price_min: number; price_max: number; verified: boolean;
 };
 type Cat = { key: string; icon: string };
@@ -108,7 +108,7 @@ export default function Discover() {
                   {p.verified && <View style={s.verifiedBadge}><Ionicons name="checkmark-circle" size={12} color="#fff" /><Text style={s.verifiedTxt}>VERIFIED</Text></View>}
                   <View style={{ padding: 12 }}>
                     <Text style={s.featName} numberOfLines={1}>{p.name}</Text>
-                    <Text style={s.featCat}>{p.category} • {p.city}</Text>
+                    <Text style={s.featCat} numberOfLines={1}>{p.category} • {p.cities[0]}{p.cities.length > 1 ? ` +${p.cities.length - 1}` : ""}</Text>
                     <View style={s.metaRow}>
                       <Ionicons name="star" size={13} color={COLORS.star} />
                       <Text style={s.rating}>{p.rating.toFixed(1)}</Text>
@@ -130,7 +130,7 @@ export default function Discover() {
               <Image source={{ uri: p.avatar || p.cover }} style={s.listAvatar} />
               <View style={{ flex: 1 }}>
                 <Text style={s.listName} numberOfLines={1}>{p.name}</Text>
-                <Text style={s.listCat}>{p.category} • {p.city}</Text>
+                <Text style={s.listCat} numberOfLines={1}>{p.category} • {p.cities[0]}{p.cities.length > 1 ? ` +${p.cities.length - 1}` : ""}</Text>
                 <View style={s.metaRow}>
                   <Ionicons name="star" size={12} color={COLORS.star} />
                   <Text style={s.rating}>{p.rating.toFixed(1)}</Text>
@@ -144,26 +144,87 @@ export default function Discover() {
       </ScrollView>
 
       {/* City Modal */}
-      <Modal visible={cityModal} transparent animationType="slide" onRequestClose={() => setCityModal(false)}>
-        <Pressable style={s.modalBg} onPress={() => setCityModal(false)}>
-          <Pressable style={s.sheet}>
-            <View style={s.sheetHandle} />
-            <Text style={s.sheetTitle}>Choose your city</Text>
-            <ScrollView style={{ maxHeight: 360 }}>
-              {["All", ...cities].map((c) => (
-                <TouchableOpacity testID={`city-${c}`} key={c} style={s.cityRow} onPress={() => { setCity(c); setCityModal(false); }}>
+      <CityPickerModal
+        visible={cityModal}
+        current={city}
+        suggestions={cities}
+        onClose={() => setCityModal(false)}
+        onSelect={(c) => { setCity(c); setCityModal(false); }}
+      />
+    </SafeAreaView>
+  );
+}
+
+function CityPickerModal({ visible, current, suggestions, onClose, onSelect }: { visible: boolean; current: string; suggestions: string[]; onClose: () => void; onSelect: (c: string) => void }) {
+  const [input, setInput] = useState("");
+  const filtered = input.trim()
+    ? suggestions.filter((c) => c.toLowerCase().includes(input.trim().toLowerCase()))
+    : suggestions;
+  const trimmed = input.trim();
+  const showCustom = trimmed.length > 1 && !suggestions.some((c) => c.toLowerCase() === trimmed.toLowerCase());
+  return (
+    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
+      <Pressable style={ms.bg} onPress={onClose}>
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined}>
+          <Pressable style={ms.sheet}>
+            <View style={ms.handle} />
+            <Text style={ms.title}>Choose your city</Text>
+            <View style={ms.inputWrap}>
+              <Ionicons name="search" size={16} color={COLORS.textTertiary} />
+              <TextInput
+                testID="city-input"
+                style={ms.input}
+                placeholder="Type your city (any city in the world)"
+                placeholderTextColor={COLORS.textTertiary}
+                value={input}
+                onChangeText={setInput}
+                autoFocus
+                returnKeyType="done"
+                onSubmitEditing={() => trimmed && onSelect(trimmed)}
+              />
+              {input.length > 0 && (
+                <TouchableOpacity onPress={() => setInput("")}><Ionicons name="close-circle" size={16} color={COLORS.textTertiary} /></TouchableOpacity>
+              )}
+            </View>
+            <ScrollView style={{ maxHeight: 320 }} keyboardShouldPersistTaps="handled">
+              <TouchableOpacity testID="city-All" style={ms.row} onPress={() => onSelect("All")}>
+                <Ionicons name="globe-outline" size={18} color={COLORS.textSecondary} />
+                <Text style={[ms.rowTxt, current === "All" && { color: COLORS.primary, fontWeight: "700" }]}>All cities</Text>
+                {current === "All" && <Ionicons name="checkmark" size={18} color={COLORS.primary} />}
+              </TouchableOpacity>
+              {showCustom && (
+                <TouchableOpacity testID="city-custom" style={ms.row} onPress={() => onSelect(trimmed)}>
+                  <Ionicons name="add-circle" size={18} color={COLORS.primary} />
+                  <Text style={[ms.rowTxt, { color: COLORS.primary, fontWeight: "700" }]}>Use “{trimmed}”</Text>
+                </TouchableOpacity>
+              )}
+              {filtered.length > 0 && <Text style={ms.section}>Popular cities</Text>}
+              {filtered.map((c) => (
+                <TouchableOpacity testID={`city-${c}`} key={c} style={ms.row} onPress={() => onSelect(c)}>
                   <Ionicons name="location-outline" size={18} color={COLORS.textSecondary} />
-                  <Text style={[s.cityRowTxt, c === city && { color: COLORS.primary, fontWeight: "700" }]}>{c}</Text>
-                  {c === city && <Ionicons name="checkmark" size={18} color={COLORS.primary} />}
+                  <Text style={[ms.rowTxt, c === current && { color: COLORS.primary, fontWeight: "700" }]}>{c}</Text>
+                  {c === current && <Ionicons name="checkmark" size={18} color={COLORS.primary} />}
                 </TouchableOpacity>
               ))}
             </ScrollView>
           </Pressable>
-        </Pressable>
-      </Modal>
-    </SafeAreaView>
+        </KeyboardAvoidingView>
+      </Pressable>
+    </Modal>
   );
 }
+
+const ms = StyleSheet.create({
+  bg: { flex: 1, backgroundColor: COLORS.overlay, justifyContent: "flex-end" },
+  sheet: { backgroundColor: COLORS.surface, borderTopLeftRadius: RADIUS.xxl, borderTopRightRadius: RADIUS.xxl, padding: SPACING.xl, paddingBottom: 32 },
+  handle: { width: 40, height: 4, backgroundColor: COLORS.border, borderRadius: 2, alignSelf: "center", marginBottom: 16 },
+  title: { fontSize: 18, fontWeight: "800", color: COLORS.text, marginBottom: 12 },
+  inputWrap: { flexDirection: "row", alignItems: "center", gap: 10, paddingHorizontal: 14, backgroundColor: COLORS.bg, borderRadius: RADIUS.md, borderWidth: 1, borderColor: COLORS.border, marginBottom: 10 },
+  input: { flex: 1, paddingVertical: 12, fontSize: 15, color: COLORS.text },
+  row: { flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: COLORS.borderLight },
+  rowTxt: { flex: 1, fontSize: 15, color: COLORS.text },
+  section: { fontSize: 11, fontWeight: "800", color: COLORS.textTertiary, textTransform: "uppercase", letterSpacing: 0.6, marginTop: 14, marginBottom: 4 },
+});
 
 const s = StyleSheet.create({
   header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: SPACING.lg, paddingTop: SPACING.md, paddingBottom: SPACING.sm },

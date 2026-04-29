@@ -7,7 +7,7 @@ import { api } from "../../src/api";
 import { COLORS, RADIUS, SPACING, SHADOW } from "../../src/theme";
 
 type Provider = {
-  id: string; name: string; category: string; city: string; cover: string; avatar: string;
+  id: string; name: string; category: string; cities: string[]; cover: string; avatar: string;
   rating: number; review_count: number; price_min: number; price_max: number; verified: boolean;
 };
 
@@ -65,9 +65,29 @@ export default function Search() {
         {q.length > 0 && <TouchableOpacity onPress={() => setQ("")}><Ionicons name="close-circle" size={18} color={COLORS.textTertiary} /></TouchableOpacity>}
       </View>
 
+      <View style={s.cityRow}>
+        <View style={s.cityRowLabel}>
+          <Ionicons name="location" size={16} color={COLORS.primary} />
+          <Text style={s.cityLabelTxt}>Location</Text>
+        </View>
+        <View style={s.cityInputWrap}>
+          <TextInput
+            testID="search-city-input"
+            style={s.cityInput}
+            placeholder="Any city (Delhi, Goa, Bangalore...)"
+            placeholderTextColor={COLORS.textTertiary}
+            value={city}
+            onChangeText={setCity}
+            autoCapitalize="words"
+            returnKeyType="done"
+          />
+          {city.length > 0 && (
+            <TouchableOpacity testID="search-city-clear" onPress={() => setCity("")}><Ionicons name="close-circle" size={16} color={COLORS.textTertiary} /></TouchableOpacity>
+          )}
+        </View>
+      </View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={s.filterRow}>
-        <Chip testID="filter-city-all" active={!city} onPress={() => setCity("")}>All cities</Chip>
-        {cities.map((c) => <Chip testID={`filter-city-${c}`} key={c} active={city === c} onPress={() => setCity(city === c ? "" : c)}>{c}</Chip>)}
+        {cities.map((c) => <Chip testID={`filter-city-${c}`} key={c} active={city.toLowerCase() === c.toLowerCase()} onPress={() => setCity(city.toLowerCase() === c.toLowerCase() ? "" : c)}>{c}</Chip>)}
       </ScrollView>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={s.filterRow}>
         <Chip testID="filter-cat-all" active={!category} onPress={() => setCategory("")}>All categories</Chip>
@@ -94,7 +114,7 @@ export default function Search() {
                   <Image source={{ uri: item.avatar }} style={s.av} />
                   <View style={{ flex: 1 }}>
                     <Text style={s.cardName} numberOfLines={1}>{item.name}</Text>
-                    <Text style={s.cardCat}>{item.category} • {item.city}</Text>
+                    <Text style={s.cardCat} numberOfLines={1}>{item.category} • {item.cities[0]}{item.cities.length > 1 ? ` +${item.cities.length - 1}` : ""}</Text>
                   </View>
                   <View style={s.ratingPill}><Ionicons name="star" size={12} color={COLORS.star} /><Text style={s.ratingTxt}>{item.rating.toFixed(1)}</Text></View>
                 </View>
@@ -116,6 +136,11 @@ const s = StyleSheet.create({
   searchBar: { flexDirection: "row", alignItems: "center", gap: 10, backgroundColor: COLORS.surface, marginHorizontal: SPACING.lg, marginTop: SPACING.sm, paddingHorizontal: 14, borderRadius: RADIUS.md, borderWidth: 1, borderColor: COLORS.border },
   searchInput: { flex: 1, paddingVertical: 14, fontSize: 15, color: COLORS.text },
   filterRow: { paddingHorizontal: SPACING.lg, paddingVertical: 8, gap: 8 },
+  cityRow: { flexDirection: "row", alignItems: "center", gap: 10, marginHorizontal: SPACING.lg, marginTop: 12 },
+  cityRowLabel: { flexDirection: "row", alignItems: "center", gap: 4 },
+  cityLabelTxt: { fontSize: 12, fontWeight: "700", color: COLORS.textSecondary, textTransform: "uppercase" },
+  cityInputWrap: { flex: 1, flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 12, paddingVertical: 4, borderWidth: 1, borderColor: COLORS.border, backgroundColor: COLORS.surface, borderRadius: RADIUS.md },
+  cityInput: { flex: 1, paddingVertical: 10, fontSize: 14, color: COLORS.text },
   chip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: RADIUS.pill, borderWidth: 1, borderColor: COLORS.border, backgroundColor: COLORS.surface },
   chipActive: { borderColor: COLORS.primary, backgroundColor: COLORS.primaryMuted },
   chipTxt: { fontSize: 12, fontWeight: "600", color: COLORS.textSecondary },

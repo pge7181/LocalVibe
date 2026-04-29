@@ -10,7 +10,7 @@ import { COLORS, RADIUS, SPACING, SHADOW } from "../../src/theme";
 type Service = { title: string; description: string; price: number; unit: string };
 type Review = { id: string; user_name: string; rating: number; comment: string; created_at: string };
 type Provider = {
-  id: string; name: string; category: string; city: string; bio: string; cover: string; avatar: string;
+  id: string; name: string; category: string; cities: string[]; bio: string; cover: string; avatar: string;
   phone: string; whatsapp: string; instagram?: string; portfolio: string[]; services: Service[];
   rating: number; review_count: number; verified: boolean; price_min: number; price_max: number;
   reviews: Review[];
@@ -53,7 +53,15 @@ export default function ProviderDetail() {
               <Text style={s.name}>{p.name}</Text>
               {p.verified && <Ionicons name="checkmark-circle" size={18} color={COLORS.success} />}
             </View>
-            <Text style={s.cat}>{p.category} • {p.city}</Text>
+            <Text style={s.cat}>{p.category}</Text>
+            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 4, marginTop: 6 }}>
+              {p.cities.map((c) => (
+                <View key={c} style={s.cityChip}>
+                  <Ionicons name="location" size={11} color={COLORS.primary} />
+                  <Text style={s.cityChipTxt}>{c}</Text>
+                </View>
+              ))}
+            </View>
             <View style={{ flexDirection: "row", alignItems: "center", gap: 6, marginTop: 4 }}>
               <Ionicons name="star" size={14} color={COLORS.star} />
               <Text style={s.rating}>{p.rating.toFixed(1)}</Text>
@@ -159,6 +167,8 @@ const s = StyleSheet.create({
   avatar: { width: 80, height: 80, borderRadius: 24, borderWidth: 3, borderColor: "#fff", backgroundColor: COLORS.borderLight },
   name: { fontSize: 20, fontWeight: "800", color: COLORS.text },
   cat: { fontSize: 13, color: COLORS.textSecondary, marginTop: 2 },
+  cityChip: { flexDirection: "row", alignItems: "center", gap: 3, paddingHorizontal: 8, paddingVertical: 3, backgroundColor: COLORS.primaryMuted, borderRadius: RADIUS.pill },
+  cityChipTxt: { fontSize: 11, fontWeight: "700", color: COLORS.primary },
   rating: { fontSize: 13, fontWeight: "700", color: COLORS.text },
   reviewCount: { fontSize: 12, color: COLORS.textSecondary },
   bio: { fontSize: 14, color: COLORS.textSecondary, lineHeight: 21, paddingHorizontal: SPACING.lg, marginTop: 14 },

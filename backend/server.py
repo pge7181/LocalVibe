@@ -104,7 +104,7 @@ class ServiceItem(BaseModel):
 class ProviderCreate(BaseModel):
     name: str
     category: str
-    city: str
+    cities: List[str] = Field(min_length=1)
     bio: str = ""
     avatar: str = ""
     cover: str = ""
@@ -120,7 +120,7 @@ class ProviderCreate(BaseModel):
 class ProviderUpdate(BaseModel):
     name: Optional[str] = None
     category: Optional[str] = None
-    city: Optional[str] = None
+    cities: Optional[List[str]] = None
     bio: Optional[str] = None
     avatar: Optional[str] = None
     cover: Optional[str] = None
@@ -213,7 +213,8 @@ async def list_providers(
 ):
     query: dict = {}
     if city and city.lower() != "all":
-        query["city"] = city
+        # Match providers that serve this city (case-insensitive)
+        query["cities"] = {"$regex": f"^{city}$", "$options": "i"}
     if category and category.lower() != "all":
         query["category"] = category
     if q:
@@ -241,7 +242,7 @@ async def list_providers(
 async def featured(city: Optional[str] = None):
     q: dict = {"verified": True}
     if city and city.lower() != "all":
-        q["city"] = city
+        q["cities"] = {"$regex": f"^{city}$", "$options": "i"}
     items = await db.providers.find(q, {"_id": 0}).sort("rating", -1).limit(10).to_list(10)
     return items
 
@@ -384,7 +385,7 @@ async def startup():
     await db.users.create_index("email", unique=True)
     await db.users.create_index("id", unique=True)
     await db.providers.create_index("id", unique=True)
-    await db.providers.create_index([("city", 1), ("category", 1)])
+    await db.providers.create_index([("cities", 1), ("category", 1)])
     await db.reviews.create_index("provider_id")
     await db.inquiries.create_index("provider_id")
 
