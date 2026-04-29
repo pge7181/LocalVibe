@@ -1,0 +1,178 @@
+{
+  "theme": "Light",
+  "archetype": "1 (Organic & Earthy) blended with vibrant Indian marketplace context",
+  "design_philosophy": "LocalVibe balances the warmth and trust of an organic palette with vibrant, energetic accents representing the rich Indian cultural context (weddings, food, celebrations). The interface uses generous spacing, soft geometry, and high-quality creator imagery to inspire confidence.",
+  "colors": {
+    "primary": "#E11D48",
+    "primary_hover": "#BE123C",
+    "primary_muted": "#FFE4E6",
+    "background": "#FAFAF9",
+    "surface": "#FFFFFF",
+    "text_primary": "#1C1917",
+    "text_secondary": "#57534E",
+    "border": "#E7E5E4",
+    "success": "#16A34A",
+    "success_muted": "#DCFCE7",
+    "warning": "#F59E0B",
+    "overlay": "rgba(0,0,0,0.4)"
+  },
+  "typography": {
+    "heading_font": "Outfit",
+    "body_font": "Manrope",
+    "scale": {
+      "h1": "text-3xl md:text-4xl font-bold tracking-tight text-stone-900",
+      "h2": "text-2xl font-bold tracking-tight text-stone-900",
+      "h3": "text-xl font-semibold text-stone-900",
+      "body": "text-base leading-relaxed text-stone-600",
+      "small": "text-sm text-stone-500",
+      "caption": "text-xs tracking-wide uppercase font-semibold text-stone-400"
+    }
+  },
+  "spacing": {
+    "screen_padding": "p-4 md:p-6",
+    "card_padding": "p-4",
+    "gap_small": "gap-2",
+    "gap_medium": "gap-4",
+    "gap_large": "gap-6",
+    "section_margin": "mb-8"
+  },
+  "border_radius": {
+    "card": "rounded-2xl",
+    "button": "rounded-xl",
+    "chip": "rounded-full",
+    "image": "rounded-xl",
+    "sheet": "rounded-t-3xl"
+  },
+  "components": {
+    "button": {
+      "primary": "bg-rose-600 text-white rounded-xl py-3.5 px-6 font-semibold flex items-center justify-center space-x-2 active:bg-rose-700 transition-colors",
+      "outline": "border-2 border-stone-200 text-stone-800 rounded-xl py-3.5 px-6 font-semibold flex items-center justify-center space-x-2 active:border-rose-600 transition-colors",
+      "ghost": "text-stone-600 active:bg-stone-100 rounded-xl py-3.5 px-6 font-medium transition-colors"
+    },
+    "card": {
+      "provider_large": "bg-white rounded-2xl shadow-sm border border-stone-100 overflow-hidden flex flex-col active:scale-[0.98] transition-transform",
+      "provider_compact": "bg-white rounded-xl shadow-sm border border-stone-100 p-3 flex flex-row items-center gap-3",
+      "review": "bg-stone-50 rounded-xl p-4 border border-stone-100"
+    },
+    "input": "bg-stone-50 border border-stone-200 text-stone-900 rounded-xl px-4 py-3.5 w-full focus:border-rose-600 focus:bg-white transition-all text-base",
+    "chip": {
+      "default": "px-4 py-2 rounded-full border border-stone-200 text-sm font-medium text-stone-700 bg-white active:bg-stone-50",
+      "active": "px-4 py-2 rounded-full border border-rose-600 text-sm font-medium text-rose-700 bg-rose-50"
+    },
+    "badge": "px-2 py-1 bg-green-50 text-green-700 text-xs font-bold rounded-md flex items-center gap-1 uppercase tracking-wide",
+    "bottom_sheet": "bg-white rounded-t-3xl shadow-[0_-8px_30px_rgba(0,0,0,0.1)] p-6 pb-8"
+  },
+  "screens": {
+    "home_discover": {
+      "layout": "Vertical scroll with Sticky Header",
+      "sections": [
+        "Header: App Logo (left) + Location Selector Pill (right, with map-pin icon)",
+        "Hero Text: 'Find the best local creators for your event'",
+        "Search Bar: Prominent input with search icon, placeholder 'Search bakers, MUAs...'",
+        "Categories Grid: 3x2 grid. Each item has a circular icon background (rose-50) and label below",
+        "Featured Section: 'Trending in <City>'. Horizontal scroll of large provider cards.",
+        "Recent Reviews: Horizontal scroll of compact review cards to build immediate trust"
+      ]
+    },
+    "search_results": {
+      "layout": "Vertical list with Sticky Filter Bar",
+      "sections": [
+        "Header: Back arrow + Search Query ('Makeup Artists in Delhi')",
+        "Filter Bar: Horizontal scrollable row of Chips (Sort, Price, Rating, Availability)",
+        "List: Vertical list of Provider Cards. Each card shows cover photo, provider avatar, name, category, rating (star icon), starting price, and verified badge."
+      ]
+    },
+    "provider_profile": {
+      "layout": "Vertical scroll with Parallax Header & Sticky Bottom CTA",
+      "sections": [
+        "Cover Image: Aspect 16:9, absolute back button",
+        "Profile Info: Avatar overlapping cover, Name, Category, Location, Rating (clickable to reviews), Verified Badge",
+        "Action Row: Share, Save/Bookmark icons",
+        "Tabs (Sticky): Portfolio | Services | Reviews",
+        "Portfolio Tab: Masonry grid of image thumbnails",
+        "Services Tab: Vertical list of service items (Title, Description, Price, 'Add' or 'Select' button)",
+        "Reviews Tab: Aggregate rating block + List of review cards",
+        "Sticky Bottom Bar: WhatsApp Chat (Green) & Request Quote (Primary Rose) buttons"
+      ]
+    },
+    "inquiry_modal": {
+      "layout": "Bottom Sheet (Modal)",
+      "fields": [
+        "Header: 'Request a Quote'",
+        "Event Type: Dropdown/Select",
+        "Date: Datepicker input",
+        "Budget: Number input with currency symbol (₹)",
+        "Message: Textarea (4 lines)",
+        "Submit: Primary full-width button 'Send Inquiry'"
+      ]
+    },
+    "provider_dashboard": {
+      "layout": "Tab Navigation (Home, Portfolio, Leads, Profile)",
+      "sections": [
+        "Header: 'Welcome back, [Name]'",
+        "Stats Row: Active Leads, Profile Views, Average Rating",
+        "Recent Leads: List of incoming inquiries with 'Accept'/'Decline' or 'Reply via WhatsApp'",
+        "Quick Actions: 'Upload to Portfolio', 'Update Pricing'"
+      ]
+    }
+  },
+  "image_urls": {
+    "makeup_artists": [
+      { "url": "https://images.unsplash.com/photo-1671450632893-9b6ec834f492?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxNzV8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjB3ZWRkaW5nJTIwbWFrZXVwJTIwYnJpZGV8ZW58MHx8fHwxNzc3NDQwMDAzfDA&ixlib=rb-4.1.0&q=85", "description": "Indian bride makeup 1" },
+      { "url": "https://images.unsplash.com/photo-1677691257001-8bfd91e288ff?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxNzV8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjB3ZWRkaW5nJTIwbWFrZXVwJTIwYnJpZGV8ZW58MHx8fHwxNzc3NDQwMDAzfDA&ixlib=rb-4.1.0&q=85", "description": "Indian bride makeup 2" },
+      { "url": "https://images.unsplash.com/photo-1677691257026-62560c7cae99?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxNzV8MHwxfHNlYXJjaHw0fHxpbmRpYW4lMjB3ZWRkaW5nJTIwbWFrZXVwJTIwYnJpZGV8ZW58MHx8fHwxNzc3NDQwMDAzfDA&ixlib=rb-4.1.0&q=85", "description": "Indian bride makeup 3" },
+      { "url": "https://images.unsplash.com/photo-1711128640065-cdac1e385dc2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxNzV8MHwxfHNlYXJjaHwyfHxpbmRpYW4lMjB3ZWRkaW5nJTIwbWFrZXVwJTIwYnJpZGV8ZW58MHx8fHwxNzc3NDQwMDAzfDA&ixlib=rb-4.1.0&q=85", "description": "Indian bride makeup 4" },
+      { "url": "https://images.pexels.com/photos/29368866/pexels-photo-29368866.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", "description": "Indian bride makeup 5" },
+      { "url": "https://images.pexels.com/photos/19021379/pexels-photo-19021379.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", "description": "Indian bride makeup 6" }
+    ],
+    "bakers": [
+      { "url": "https://images.unsplash.com/photo-1720798299028-c3bfaf06b522?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjB3ZWRkaW5nJTIwY2FrZSUyMGJha2VyfGVufDB8fHx8MTc3NzQ0MDAwM3ww&ixlib=rb-4.1.0&q=85", "description": "Wedding cake 1" },
+      { "url": "https://images.unsplash.com/photo-1703740613041-0298814d1bc2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjB3ZWRkaW5nJTIwY2FrZSUyMGJha2VyfGVufDB8fHx8MTc3NzQ0MDAwM3ww&ixlib=rb-4.1.0&q=85", "description": "Wedding cake 2" },
+      { "url": "https://images.unsplash.com/photo-1720798299109-6adf5d84438c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwyfHxpbmRpYW4lMjB3ZWRkaW5nJTIwY2FrZSUyMGJha2VyfGVufDB8fHx8MTc3NzQ0MDAwM3ww&ixlib=rb-4.1.0&q=85", "description": "Wedding cake 3" },
+      { "url": "https://images.unsplash.com/photo-1703740612713-490e631e8b57?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHw0fHxpbmRpYW4lMjB3ZWRkaW5nJTIwY2FrZSUyMGJha2VyfGVufDB8fHx8MTc3NzQ0MDAwM3ww&ixlib=rb-4.1.0&q=85", "description": "Wedding cake 4" },
+      { "url": "https://images.pexels.com/photos/28259736/pexels-photo-28259736.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", "description": "Wedding cake 5" },
+      { "url": "https://images.pexels.com/photos/6997253/pexels-photo-6997253.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", "description": "Wedding cake 6" }
+    ],
+    "decorators": [
+      { "url": "https://images.unsplash.com/photo-1772127822514-682aeffcc0d3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzB8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjB3ZWRkaW5nJTIwZGVjb3IlMjBzZXR1cHxlbnwwfHx8fDE3Nzc0NDAwMDN8MA&ixlib=rb-4.1.0&q=85", "description": "Wedding decor setup 1" },
+      { "url": "https://images.unsplash.com/photo-1772127822525-7eda37383b9f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzB8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjB3ZWRkaW5nJTIwZGVjb3IlMjBzZXR1cHxlbnwwfHx8fDE3Nzc0NDAwMDN8MA&ixlib=rb-4.1.0&q=85", "description": "Wedding decor setup 2" },
+      { "url": "https://images.unsplash.com/photo-1772127822653-4431a9b8c31b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzB8MHwxfHNlYXJjaHwyfHxpbmRpYW4lMjB3ZWRkaW5nJTIwZGVjb3IlMjBzZXR1cHxlbnwwfHx8fDE3Nzc0NDAwMDN8MA&ixlib=rb-4.1.0&q=85", "description": "Wedding decor setup 3" },
+      { "url": "https://images.unsplash.com/photo-1739815256285-1764538c89f3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzB8MHwxfHNlYXJjaHw0fHxpbmRpYW4lMjB3ZWRkaW5nJTIwZGVjb3IlMjBzZXR1cHxlbnwwfHx8fDE3Nzc0NDAwMDN8MA&ixlib=rb-4.1.0&q=85", "description": "Wedding decor setup 4" },
+      { "url": "https://images.pexels.com/photos/36943221/pexels-photo-36943221.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", "description": "Wedding decor setup 5" },
+      { "url": "https://images.pexels.com/photos/33331302/pexels-photo-33331302.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", "description": "Wedding decor setup 6" }
+    ],
+    "caterers": [
+      { "url": "https://images.unsplash.com/photo-1643146001775-92cab5e7a88a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTB8MHwxfHNlYXJjaHwyfHxpbmRpYW4lMjBldmVudCUyMHBsYW5uZXIlMjBjYXRlcmVyJTIwZm9vZHxlbnwwfHx8fDE3Nzc0NDAwMDN8MA&ixlib=rb-4.1.0&q=85", "description": "Catering food 1" },
+      { "url": "https://images.unsplash.com/photo-1560117531-2304cfbbe9f6?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTB8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjBldmVudCUyMHBsYW5uZXIlMjBjYXRlcmVyJTIwZm9vZHxlbnwwfHx8fDE3Nzc0NDAwMDN8MA&ixlib=rb-4.1.0&q=85", "description": "Catering food 2" },
+      { "url": "https://images.unsplash.com/photo-1738202321539-9ed4a727f735?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTB8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBldmVudCUyMHBsYW5uZXIlMjBjYXRlcmVyJTIwZm9vZHxlbnwwfHx8fDE3Nzc0NDAwMDN8MA&ixlib=rb-4.1.0&q=85", "description": "Catering food 3" },
+      { "url": "https://images.unsplash.com/photo-1575469503114-6ce5ae5dcdf5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTB8MHwxfHNlYXJjaHw0fHxpbmRpYW4lMjBldmVudCUyMHBsYW5uZXIlMjBjYXRlcmVyJTIwZm9vZHxlbnwwfHx8fDE3Nzc0NDAwMDN8MA&ixlib=rb-4.1.0&q=85", "description": "Catering food 4" },
+      { "url": "https://images.pexels.com/photos/19659620/pexels-photo-19659620.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", "description": "Catering food 5" },
+      { "url": "https://images.pexels.com/photos/33419116/pexels-photo-33419116.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", "description": "Catering food 6" }
+    ],
+    "photographers": [
+      { "url": "https://images.unsplash.com/photo-1657098439949-fee638f883cc?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTN8MHwxfHNlYXJjaHwyfHxpbmRpYW4lMjBwaG90b2dyYXBoZXIlMjBjYW5kaWR8ZW58MHx8fHwxNzc3NDQwMDA5fDA&ixlib=rb-4.1.0&q=85", "description": "Candid photography 1" },
+      { "url": "https://images.unsplash.com/photo-1612872642947-931dc3bcb5ac?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTN8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBwaG90b2dyYXBoZXIlMjBjYW5kaWR8ZW58MHx8fHwxNzc3NDQwMDA5fDA&ixlib=rb-4.1.0&q=85", "description": "Candid photography 2" },
+      { "url": "https://images.unsplash.com/photo-1734313805338-a30b86e912a5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTN8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjBwaG90b2dyYXBoZXIlMjBjYW5kaWR8ZW58MHx8fHwxNzc3NDQwMDA5fDA&ixlib=rb-4.1.0&q=85", "description": "Candid photography 3" },
+      { "url": "https://images.pexels.com/photos/30657776/pexels-photo-30657776.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", "description": "Candid photography 4" },
+      { "url": "https://images.unsplash.com/photo-1673315849128-18a12439969d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTN8MHwxfHNlYXJjaHw0fHxpbmRpYW4lMjBwaG90b2dyYXBoZXIlMjBjYW5kaWR8ZW58MHx8fHwxNzc3NDQwMDA5fDA&ixlib=rb-4.1.0&q=85", "description": "Candid photography 5" },
+      { "url": "https://images.pexels.com/photos/9727189/pexels-photo-9727189.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", "description": "Candid photography 6" }
+    ],
+    "avatars_women": [
+      { "url": "https://images.unsplash.com/photo-1759840278381-bf7d5e332050?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NjV8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjB3b21hbiUyMHBvcnRyYWl0JTIwc21pbGluZ3xlbnwwfHx8fDE3Nzc0NDAwMDl8MA&ixlib=rb-4.1.0&q=85", "description": "Indian woman avatar 1" },
+      { "url": "https://images.unsplash.com/photo-1725611224180-4a50ef13a0e8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NjV8MHwxfHNlYXJjaHwyfHxpbmRpYW4lMjB3b21hbiUyMHBvcnRyYWl0JTIwc21pbGluZ3xlbnwwfHx8fDE3Nzc0NDAwMDl8MA&ixlib=rb-4.1.0&q=85", "description": "Indian woman avatar 2" },
+      { "url": "https://images.unsplash.com/photo-1580746453801-37b0bc56f3b4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NjV8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjB3b21hbiUyMHBvcnRyYWl0JTIwc21pbGluZ3xlbnwwfHx8fDE3Nzc0NDAwMDl8MA&ixlib=rb-4.1.0&q=85", "description": "Indian woman avatar 3" },
+      { "url": "https://images.unsplash.com/photo-1759840278511-f73a3d62fb9f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NjV8MHwxfHNlYXJjaHw0fHxpbmRpYW4lMjB3b21hbiUyMHBvcnRyYWl0JTIwc21pbGluZ3xlbnwwfHx8fDE3Nzc0NDAwMDl8MA&ixlib=rb-4.1.0&q=85", "description": "Indian woman avatar 4" },
+      { "url": "https://images.pexels.com/photos/29899016/pexels-photo-29899016.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", "description": "Indian woman avatar 5" },
+      { "url": "https://images.pexels.com/photos/4428278/pexels-photo-4428278.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", "description": "Indian woman avatar 6" }
+    ],
+    "avatars_men": [
+      { "url": "https://images.unsplash.com/photo-1766162689608-b14a572cf9d4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjBtYW4lMjBwb3J0cmFpdCUyMHNtaWxpbmd8ZW58MHx8fHwxNzc3NDQwMDA5fDA&ixlib=rb-4.1.0&q=85", "description": "Indian man avatar 1" },
+      { "url": "https://images.unsplash.com/photo-1759851683916-b1aee28f28a2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHw0fHxpbmRpYW4lMjBtYW4lMjBwb3J0cmFpdCUyMHNtaWxpbmd8ZW58MHx8fHwxNzc3NDQwMDA5fDA&ixlib=rb-4.1.0&q=85", "description": "Indian man avatar 2" },
+      { "url": "https://images.pexels.com/photos/31266683/pexels-photo-31266683.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", "description": "Indian man avatar 3" },
+      { "url": "https://images.unsplash.com/photo-1586138888839-4990b010bb23?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBtYW4lMjBwb3J0cmFpdCUyMHNtaWxpbmd8ZW58MHx8fHwxNzc3NDQwMDA5fDA&ixlib=rb-4.1.0&q=85", "description": "Indian man avatar 4" },
+      { "url": "https://images.unsplash.com/photo-1741363863033-2d68f0bd9fde?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHwyfHxpbmRpYW4lMjBtYW4lMjBwb3J0cmFpdCUyMHNtaWxpbmd8ZW58MHx8fHwxNzc3NDQwMDA5fDA&ixlib=rb-4.1.0&q=85", "description": "Indian man avatar 5" },
+      { "url": "https://images.pexels.com/photos/28945957/pexels-photo-28945957.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", "description": "Indian man avatar 6" }
+    ]
+  },
+  "instructions_to_main_agent": "Use React Native primitives or Expo Router. Apply Tailwind classes via NativeWind. Ensure generous padding (`p-4` or `p-6`) and border-radius (`rounded-2xl` for cards, `rounded-xl` for buttons) for a modern, tactile mobile app feel. Include `data-testid` on all interactive elements (buttons, inputs, tabs). Use Phosphor Icons for iconography. Stick to the provided warm color palette and avoid using system default blues/purples. Provide image sources from the exact URLs specified in this JSON for authentic placeholder data."
+}
